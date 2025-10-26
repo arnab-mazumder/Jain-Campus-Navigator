@@ -191,12 +191,7 @@ Contributions are welcome! Please follow these steps:
 
 **Team MG**
 
-- **[Arnab Mazumder](https://github.com/arnabmazumder)** - Team Lead
-- Karthik G
-- Pranav S
-- Bhoomi Umakant Rane
-- Abhayanand G
-- Kathyayini
+- **[Arnab Mazumder](https://github.com/arnabmazumder)**
 
 ## 📝 License
 
