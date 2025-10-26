@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <title>Jain Campus Navigator</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Desktop Sidebar -->
+  <div class="sidebar desktop-only">
+    <div class="sidebar-header">
+      <h1 class="brand">Jain Campus Navigator</h1>
+      <p class="tagline">Find your way around campus</p>
+    </div>
+
+    <div class="directions-panel">
+      <div class="location-inputs">
+        <div class="input-row">
+          <span class="icon origin-icon">●</span>
+          <select id="from-desktop" class="location-select"></select>
+        </div>
+        <button id="swapBtn-desktop" class="swap-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2"/>
+            <path d="M17 14L12 9L7 14" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+        <div class="input-row">
+          <span class="icon dest-icon">📍</span>
+          <select id="to-desktop" class="location-select"></select>
+        </div>
+      </div>
+
+      <button id="routeBtn-desktop" class="directions-btn">
+        <span>Get Directions</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+        </svg>
+      </button>
+
+      <div id="route-info-desktop" class="route-info hidden">
+        <div class="route-summary">
+          <div class="walk-icon">🚶</div>
+          <div class="route-details">
+            <div id="summary-desktop" class="time-distance"></div>
+            <div class="mode">Walking • Shortest path</div>
+          </div>
+        </div>
+        <div class="algorithm-badge">
+          <span class="badge-icon">⚡</span>
+          Dijkstra's Algorithm
+        </div>
+      </div>
+    </div>
+
+    <div class="team-credits">
+      <button class="credits-toggle" id="creditsToggle">
+        <span>Made by Team MG</span>
+        <span class="toggle-icon">▼</span>
+      </button>
+      <div class="team-list" id="teamList">
+        <div class="team-member lead">
+          <span class="member-icon">👨‍💼</span>
+          <div class="member-info">
+            <div class="member-name">Arnab Mazumder</div>
+            <div class="member-role">Team Lead</div>
+          </div>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👨‍💻</span>
+          <span class="member-name">Karthik G</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👨‍💻</span>
+          <span class="member-name">Pranav S</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👩‍💻</span>
+          <span class="member-name">Bhoomi Umakant Rane</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👨‍💻</span>
+          <span class="member-name">Abhayanand G</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👩‍💻</span>
+          <span class="member-name">Kathyayini</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Search Bar -->
+  <div class="mobile-search-bar mobile-only">
+    <div class="mobile-inputs">
+      <div class="mobile-input">
+        <span class="mobile-icon">●</span>
+        <select id="from-mobile" class="mobile-select"></select>
+      </div>
+      <button id="swapBtn-mobile" class="mobile-swap">⇅</button>
+      <div class="mobile-input">
+        <span class="mobile-icon">📍</span>
+        <select id="to-mobile" class="mobile-select"></select>
+      </div>
+    </div>
+    <button id="routeBtn-mobile" class="mobile-route-btn">Go</button>
+  </div>
+
+  <!-- Mobile Floating Route Card -->
+  <div id="mobile-route-card" class="mobile-route-card mobile-only hidden">
+    <div class="route-card-content">
+      <div class="route-card-header">
+        <div class="route-icon">🚶</div>
+        <div>
+          <div id="summary-mobile" class="mobile-time"></div>
+          <div class="mobile-mode">Walking</div>
+        </div>
+      </div>
+      <button class="close-card" id="closeCard">×</button>
+    </div>
+  </div>
+
+  <!-- Mobile Team Info Button -->
+    <button class="mobile-info-btn mobile-only" id="mobileInfoBtn">
+    <span class="info-icon">🧑‍💻</span>
+    </button>
+
+  <!-- Mobile Team Modal -->
+  <div class="mobile-modal mobile-only hidden" id="teamModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Team MG</h3>
+        <button class="modal-close" id="modalClose">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="team-member lead">
+          <span class="member-icon">👨‍💼</span>
+          <div class="member-info">
+            <div class="member-name">Arnab Mazumder</div>
+            <div class="member-role">Team Lead</div>
+          </div>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👨‍💻</span>
+          <span class="member-name">Karthik G</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👨‍💻</span>
+          <span class="member-name">Pranav S</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👩‍💻</span>
+          <span class="member-name">Bhoomi Umakant Rane</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👨‍💻</span>
+          <span class="member-name">Abhayanand G</span>
+        </div>
+        <div class="team-member">
+          <span class="member-icon">👩‍💻</span>
+          <span class="member-name">Kathyayini</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Desktop credits toggle
+    document.getElementById('creditsToggle')?.addEventListener('click', function() {
+      const teamList = document.getElementById('teamList');
+      const icon = this.querySelector('.toggle-icon');
+      teamList.classList.toggle('open');
+      icon.textContent = teamList.classList.contains('open') ? '▲' : '▼';
+    });
+
+    // Mobile team modal
+    document.getElementById('mobileInfoBtn')?.addEventListener('click', () => {
+      document.getElementById('teamModal').classList.remove('hidden');
+    });
+    
+    document.getElementById('modalClose')?.addEventListener('click', () => {
+      document.getElementById('teamModal').classList.add('hidden');
+    });
+
+    // Mobile route card close
+    document.getElementById('closeCard')?.addEventListener('click', () => {
+      document.getElementById('mobile-route-card').classList.add('hidden');
+    });
+
+    // Sync mobile/desktop selects
+    const isMobile = window.innerWidth <= 768;
+    const fromSelect = isMobile ? 'from-mobile' : 'from-desktop';
+    const toSelect = isMobile ? 'to-mobile' : 'to-desktop';
+  </script>
+</body>
+</html>

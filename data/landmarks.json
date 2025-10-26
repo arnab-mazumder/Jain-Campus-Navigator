@@ -1,0 +1,22 @@
+[
+    {"id":"aero","name":"Jain Aerospace Block","lat":12.6388476,"lng":77.4402237},
+    {"id":"nonit","name":"Jain Non IT Block","lat":12.638547,"lng":77.440277},
+    {"id":"cothas","name":"Jain University Cothas","lat":12.641327,"lng":77.440454},
+    {"id":"golf","name":"Jain Golf Course","lat":12.641138,"lng":77.437456},
+    {"id":"football","name":"Jain University Football Ground","lat":12.639529,"lng":77.441651},
+    {"id":"busstop","name":"Jain University Bus Stop","lat":12.642641,"lng":77.439569},
+    {"id":"forging","name":"Jain University Forging Block","lat":12.642392,"lng":77.441002},
+    {"id":"fet","name":"Jain University FET Block","lat":12.642092,"lng":77.439931},
+    {"id":"purvanchal1","name":"Jain University Purvanchal Hostel (N)","lat":12.641242,"lng":77.441184},
+    {"id":"canteen","name":"Jain University Canteen Mess","lat":12.641160,"lng":77.440851},
+    {"id":"karakoram","name":"Jain University Karakoram Hostel","lat":12.640869,"lng":77.441449},
+    {"id":"himalaya","name":"Himalaya Hostel","lat":12.640929,"lng":77.440588},
+    {"id":"parking","name":"Parking Area","lat":12.642184,"lng":77.439711},
+    {"id":"watertreatment","name":"Water Treatment Plant","lat":12.642356,"lng":77.438209},
+    {"id":"cricket","name":"Jain University Cricket Ground","lat":12.640322,"lng":77.444397},
+    {"id":"swimming","name":"Jain University Swimming Track","lat":12.640688,"lng":77.444440},
+    {"id":"colosseum","name":"Jain University Colosseum","lat":12.640368,"lng":77.443598},
+    {"id":"sridatta","name":"Sri Datta Sai Spiritual Centre","lat":12.638693,"lng":77.443029},
+    {"id":"temple","name":"Jain Temple","lat":12.638279,"lng":77.443544},
+    {"id":"jirs","name":"Jain International Residential School","lat":12.637945,"lng":77.444869}
+]
