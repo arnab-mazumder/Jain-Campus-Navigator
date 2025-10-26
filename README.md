@@ -25,10 +25,10 @@ Visit the live application: **[Jain Campus Navigator](https://jain-campus-naviga
 ## 📸 Screenshots
 
 ### Desktop View
-![Desktop View](screenshots/desktop.png)
+![Desktop View](assets/desktop.png)
 
 ### Mobile View
-![Mobile View](screenshots/mobile.png)
+![Mobile View](assets/mobile.png)
 
 ## 🏗️ Project Structure
 
@@ -216,4 +216,5 @@ Project Link: [https://github.com/arnabmazumder/jain-campus-navigator](https://g
 <p align="center">
   <a href="https://jainuniversity.ac.in">Jain University</a> •
   <a href="https://github.com/arnabmazumder">GitHub</a>
+
 </p>
