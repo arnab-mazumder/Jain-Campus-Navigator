@@ -191,7 +191,7 @@ Contributions are welcome! Please follow these steps:
 
 **Team MG**
 
-- **[Arnab Mazumder](https://github.com/arnabmazumder)**
+- **[Arnab Mazumder](https://github.com/arnab-mazumder)**
 
 ## 📝 License
 
@@ -206,7 +206,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-**Arnab Mazumder** - [@arnabmazumder](https://github.com/arnabmazumder)
+**Arnab Mazumder** - [@arnabmazumder](https://github.com/arnab-mazumder)
 
 Project Link: [https://github.com/arnabmazumder/jain-campus-navigator](https://github.com/arnabmazumder/jain-campus-navigator)
 
@@ -218,3 +218,4 @@ Project Link: [https://github.com/arnabmazumder/jain-campus-navigator](https://g
   <a href="https://github.com/arnabmazumder">GitHub</a>
 
 </p>
+
