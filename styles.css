@@ -4,20 +4,18 @@
   padding: 0;
 }
 
+
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   overflow: hidden;
   background: #f8f9fa;
 }
 
-/* Show/Hide Desktop/Mobile */
-.desktop-only {
-  display: block;
-}
 
-.mobile-only {
-  display: none;
-}
+/* Show/Hide Desktop/Mobile */
+.desktop-only { display: block; }
+.mobile-only { display: none; }
+
 
 /* Desktop Sidebar */
 .sidebar {
@@ -34,12 +32,14 @@ body {
   overflow: hidden;
 }
 
+
 .sidebar-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 16px 20px;
   color: white;
   flex-shrink: 0;
 }
+
 
 .brand {
   font-size: 20px;
@@ -48,11 +48,13 @@ body {
   margin-bottom: 4px;
 }
 
+
 .tagline {
   font-size: 12px;
   opacity: 0.9;
   font-weight: 400;
 }
+
 
 .directions-panel {
   padding: 20px;
@@ -60,12 +62,14 @@ body {
   overflow-y: auto;
 }
 
+
 .location-inputs {
   display: flex;
   flex-direction: column;
   gap: 0;
   margin-bottom: 16px;
 }
+
 
 .input-row {
   display: flex;
@@ -79,29 +83,20 @@ body {
   transition: all 0.3s ease;
 }
 
+
 .input-row:hover {
   border-color: #667eea;
   background: #f8f9ff;
 }
 
-.input-row:first-child {
-  border-radius: 10px 10px 0 0;
-}
 
-.input-row:last-child {
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 0;
-}
+.input-row:first-child { border-radius: 10px 10px 0 0; }
+.input-row:last-child { border-radius: 0 0 10px 10px; margin-bottom: 0; }
 
-.icon {
-  font-size: 16px;
-  flex-shrink: 0;
-}
 
-.origin-icon {
-  color: #4285f4;
-  font-weight: bold;
-}
+.icon { font-size: 16px; flex-shrink: 0; }
+.origin-icon { color: #4285f4; font-weight: bold; }
+
 
 .location-select {
   flex: 1;
@@ -113,6 +108,7 @@ body {
   cursor: pointer;
   outline: none;
 }
+
 
 .swap-btn {
   align-self: center;
@@ -132,12 +128,14 @@ body {
   transition: all 0.3s ease;
 }
 
+
 .swap-btn:hover {
   background: #667eea;
   border-color: #667eea;
   color: white;
   transform: rotate(180deg);
 }
+
 
 .directions-btn {
   width: 100%;
@@ -157,10 +155,12 @@ body {
   gap: 8px;
 }
 
+
 .directions-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(102, 126, 234, 0.5);
 }
+
 
 .route-info {
   margin-top: 20px;
@@ -171,9 +171,9 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
 }
 
-.route-info.hidden {
-  display: none;
-}
+
+.route-info.hidden { display: none; }
+
 
 .route-summary {
   display: flex;
@@ -182,13 +182,10 @@ body {
   margin-bottom: 10px;
 }
 
-.walk-icon {
-  font-size: 32px;
-}
 
-.route-details {
-  flex: 1;
-}
+.walk-icon { font-size: 32px; }
+.route-details { flex: 1; }
+
 
 .time-distance {
   font-size: 20px;
@@ -201,29 +198,20 @@ body {
   background-clip: text;
 }
 
+
 .mode {
   font-size: 12px;
   color: #5f6368;
   font-weight: 500;
 }
 
-.algorithm-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 16px;
-  font-size: 11px;
-  font-weight: 600;
-}
 
 .team-credits {
   background: linear-gradient(135deg, #f8f9fa 0%, #e8eaed 100%);
   border-top: 2px solid #e8eaed;
   flex-shrink: 0;
 }
+
 
 .credits-toggle {
   width: 100%;
@@ -242,14 +230,10 @@ body {
   transition: background 0.2s;
 }
 
-.credits-toggle:hover {
-  background: rgba(102, 126, 234, 0.1);
-}
 
-.toggle-icon {
-  font-size: 10px;
-  transition: transform 0.3s;
-}
+.credits-toggle:hover { background: rgba(102, 126, 234, 0.1); }
+.toggle-icon { font-size: 10px; transition: transform 0.3s; }
+
 
 .team-list {
   max-height: 0;
@@ -258,11 +242,13 @@ body {
   padding: 0 20px;
 }
 
+
 .team-list.open {
   max-height: 300px;
   overflow-y: auto;
   padding: 10px 20px 16px;
 }
+
 
 .team-member {
   display: flex;
@@ -277,31 +263,23 @@ body {
   font-size: 12px;
 }
 
+
 .team-member:hover {
   transform: translateX(4px);
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
 }
+
 
 .team-member.lead {
   background: linear-gradient(135deg, #f8f9ff 0%, #fff 100%);
   border: 2px solid #667eea;
 }
 
-.member-icon {
-  font-size: 18px;
-}
 
-.member-name {
-  font-weight: 600;
-  color: #202124;
-}
+.member-icon { font-size: 18px; }
+.member-name { font-weight: 600; color: #202124; }
+.member-role { font-size: 10px; color: #667eea; font-weight: 600; margin-top: 2px; }
 
-.member-role {
-  font-size: 10px;
-  color: #667eea;
-  font-weight: 600;
-  margin-top: 2px;
-}
 
 #map {
   position: absolute;
@@ -312,17 +290,91 @@ body {
   background: #e5e3df;
 }
 
+
+/* Alternatives list */
+.alts {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 2px solid #e8eaed;
+}
+
+
+.alts-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #5f6368;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+
+.alts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+
+.alt-item {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: white;
+  border: 2px solid #e8eaed;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+
+.alt-item:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+
+.alt-item.selected {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
+}
+
+
+.alt-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+
+.alt-time {
+  font-size: 16px;
+  font-weight: 700;
+  color: #202124;
+}
+
+
+.alt-distance {
+  font-size: 13px;
+  font-weight: 600;
+  color: #667eea;
+}
+
+
+.alt-sub {
+  margin-top: 4px;
+  font-size: 11px;
+  color: #5f6368;
+  font-weight: 500;
+}
+
+
 /* Mobile Styles */
 @media (max-width: 768px) {
-  .desktop-only {
-    display: none !important;
-  }
-  
-  .mobile-only {
-    display: block;
-  }
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block; }
 
-  /* Mobile Search Bar */
+
   .mobile-search-bar {
     position: fixed;
     top: 12px;
@@ -338,12 +390,14 @@ body {
     align-items: center;
   }
 
+
   .mobile-inputs {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
+
 
   .mobile-input {
     display: flex;
@@ -354,9 +408,9 @@ body {
     border-radius: 8px;
   }
 
-  .mobile-icon {
-    font-size: 14px;
-  }
+
+  .mobile-icon { font-size: 14px; }
+
 
   .mobile-select {
     flex: 1;
@@ -367,6 +421,7 @@ body {
     color: #202124;
     outline: none;
   }
+
 
   .mobile-swap {
     width: 32px;
@@ -383,6 +438,7 @@ body {
     justify-content: center;
   }
 
+
   .mobile-route-btn {
     padding: 8px 16px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -395,33 +451,85 @@ body {
     flex-shrink: 0;
   }
 
-  /* Mobile Floating Route Card */
+
   .mobile-route-card {
     position: fixed;
     bottom: 20px;
     left: 12px;
-    right: 12px;
     z-index: 1000;
     background: white;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-    animation: slideUp 0.3s ease;
+    transition: all 0.3s ease;
   }
 
-  @keyframes slideUp {
-    from {
-      transform: translateY(100px);
+
+  .mobile-route-card.hidden { display: none; }
+
+
+  /* Collapsed button view */
+  .collapsed-view {
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 16px;
+    background: white;
+    min-width: 150px;
+  }
+
+  .collapsed-view.hidden {
+    display: none;
+  }
+
+  .collapsed-view:active {
+    transform: scale(0.95);
+  }
+
+
+
+  .collapsed-content {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+
+  .collapsed-time {
+    font-size: 16px;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 2px;
+  }
+
+
+  .collapsed-mode {
+    font-size: 11px;
+    color: #5f6368;
+    font-weight: 500;
+  }
+
+
+  /* Expanded card view */
+  .expanded-view {
+    width: calc(100vw - 24px);
+    max-width: 400px;
+    animation: expandCard 0.3s ease;
+  }
+
+
+  @keyframes expandCard {
+    from { 
+      transform: scale(0.9);
       opacity: 0;
     }
-    to {
-      transform: translateY(0);
+    to { 
+      transform: scale(1);
       opacity: 1;
     }
   }
 
-  .mobile-route-card.hidden {
-    display: none;
-  }
+
+  .expanded-view.hidden { display: none; }
+
 
   .route-card-content {
     padding: 16px;
@@ -430,15 +538,16 @@ body {
     justify-content: space-between;
   }
 
+
   .route-card-header {
     display: flex;
     gap: 12px;
     align-items: center;
   }
 
-  .route-icon {
-    font-size: 28px;
-  }
+
+  .route-icon { font-size: 28px; }
+
 
   .mobile-time {
     font-size: 18px;
@@ -447,11 +556,13 @@ body {
     margin-bottom: 4px;
   }
 
+
   .mobile-mode {
     font-size: 11px;
     color: #5f6368;
     font-weight: 500;
   }
+
 
   .close-card {
     width: 32px;
@@ -464,8 +575,15 @@ body {
     cursor: pointer;
   }
 
+
+  /* Alternatives inside mobile card */
+  .alts-mobile {
+    padding: 0 16px 16px 16px;
+  }
+
+
   /* Mobile Info Button */
-    .mobile-info-btn {
+  .mobile-info-btn {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -482,11 +600,11 @@ body {
     align-items: center;
     gap: 8px;
     font-weight: 600;
-    }
+  }
 
-    .info-icon {
-    font-size: 24px;
-    }
+
+  .info-icon { font-size: 24px; }
+
 
   /* Mobile Team Modal */
   .mobile-modal {
@@ -499,14 +617,12 @@ body {
     animation: fadeIn 0.3s ease;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
 
-  .mobile-modal.hidden {
-    display: none;
-  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+
+  .mobile-modal.hidden { display: none; }
+
 
   .modal-content {
     width: 100%;
@@ -517,10 +633,9 @@ body {
     animation: slideUpModal 0.3s ease;
   }
 
-  @keyframes slideUpModal {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
+
+  @keyframes slideUpModal { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
 
   .modal-header {
     display: flex;
@@ -532,10 +647,9 @@ body {
     color: white;
   }
 
-  .modal-header h3 {
-    font-size: 18px;
-    font-weight: 700;
-  }
+
+  .modal-header h3 { font-size: 18px; font-weight: 700; }
+
 
   .modal-close {
     width: 32px;
@@ -548,11 +662,13 @@ body {
     cursor: pointer;
   }
 
+
   .modal-body {
     padding: 16px 20px;
     max-height: calc(70vh - 64px);
     overflow-y: auto;
   }
+
 
   #map {
     position: fixed;
