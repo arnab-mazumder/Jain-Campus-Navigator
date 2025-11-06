@@ -1,11 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Jain Campus Navigator</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -18,45 +19,42 @@
       <p class="tagline">Find your way around campus</p>
     </div>
 
-
     <div class="directions-panel">
       <div class="location-inputs">
         <div class="input-row">
-          <span class="icon origin-icon">●</span>
+          <span class="icon origin-icon">◎</span>
           <select id="from-desktop" class="location-select"></select>
         </div>
-        <button id="swapBtn-desktop" class="swap-btn">
+        <button id="swapBtn-desktop" class="swap-btn" title="Swap">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
             <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2"/>
             <path d="M17 14L12 9L7 14" stroke="currentColor" stroke-width="2"/>
           </svg>
         </button>
         <div class="input-row">
-          <span class="icon dest-icon">📍</span>
+          <span class="icon dest-icon">⌖</span>
           <select id="to-desktop" class="location-select"></select>
         </div>
       </div>
 
-
-      <button id="routeBtn-desktop" class="directions-btn">
-        <span>Get Directions</span>
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
-        </svg>
-      </button>
-
+      <div>
+        <button id="routeBtn-desktop" class="directions-btn">
+          <span>Get Directions</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </button>
+      </div>
 
       <div id="route-info-desktop" class="route-info hidden">
         <div class="route-summary">
           <div class="walk-icon">🚶</div>
           <div class="route-details">
-            <div id="summary-desktop" class="time-distance"></div>
+            <div id="summary-desktop" class="time-distance">—</div>
             <div class="mode">Walking • Shortest path</div>
           </div>
         </div>
 
-
-        <!-- Alternatives list (desktop) -->
         <div class="alts">
           <div class="alts-title">Alternative Routes</div>
           <div id="alts-desktop" class="alts-list"></div>
@@ -64,89 +62,83 @@
       </div>
     </div>
 
-
     <div class="team-credits">
       <button class="credits-toggle" id="creditsToggle">
         <span>Made by Team MG</span>
-        <span class="toggle-icon">▼</span>
+        <span class="toggle-icon">▾</span>
       </button>
       <div class="team-list" id="teamList">
         <div class="team-member lead">
-          <span class="member-icon">👨‍💼</span>
+          <span class="member-icon">👨💼</span>
           <div class="member-info">
             <div class="member-name">Arnab Mazumder</div>
             <div class="member-role">Team Lead</div>
           </div>
         </div>
-        <div class="team-member">
-          <span class="member-icon">👨‍💻</span>
-          <span class="member-name">Karthik G</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👨‍💻</span>
-          <span class="member-name">Pranav S</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👩‍💻</span>
-          <span class="member-name">Bhoomi Umakant Rane</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👨‍💻</span>
-          <span class="member-name">Abhayanand G</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👩‍💻</span>
-          <span class="member-name">Kathyayini</span>
-        </div>
+        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Karthik G</span></div>
+        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Pranav S</span></div>
+        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Bhoomi Umakant Rane</span></div>
+        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Abhayanand G</span></div>
+        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Kathyayini</span></div>
       </div>
     </div>
   </div>
-
 
   <!-- Mobile Search Bar -->
   <div class="mobile-search-bar mobile-only">
     <div class="mobile-inputs">
       <div class="mobile-input">
-        <span class="mobile-icon">●</span>
+        <span class="mobile-icon">◎</span>
         <select id="from-mobile" class="mobile-select"></select>
       </div>
-      <button id="swapBtn-mobile" class="mobile-swap">⇅</button>
+      <button id="swapBtn-mobile" class="mobile-swap" title="Swap">⇅</button>
       <div class="mobile-input">
-        <span class="mobile-icon">📍</span>
+        <span class="mobile-icon">⌖</span>
         <select id="to-mobile" class="mobile-select"></select>
       </div>
     </div>
     <button id="routeBtn-mobile" class="mobile-route-btn">Go</button>
   </div>
 
-
   <!-- Mobile Floating Route Card -->
   <div id="mobile-route-card" class="mobile-route-card mobile-only hidden">
-    <!-- Collapsed button view -->
     <div id="collapsed-view" class="collapsed-view">
       <div class="collapsed-content">
         <div class="route-icon">🚶</div>
         <div>
-          <div id="summary-collapsed" class="collapsed-time"></div>
+          <div id="summary-collapsed" class="collapsed-time">—</div>
           <div class="collapsed-mode">Walking</div>
         </div>
       </div>
     </div>
-    
-    <!-- Expanded card view -->
+
     <div id="expanded-view" class="expanded-view hidden">
       <div class="route-card-content">
         <div class="route-card-header">
           <div class="route-icon">🚶</div>
           <div>
-            <div id="summary-mobile" class="mobile-time"></div>
+            <div id="summary-mobile" class="mobile-time">—</div>
             <div class="mobile-mode">Walking</div>
           </div>
         </div>
-        <button class="close-card" id="closeCard">×</button>
+        <button class="close-card" id="closeCard">✕</button>
       </div>
 
-      <!-- Alternatives list (mobile) -->
+      <div class="nav-buttons">
+        <button id="startNavBtn-mobile" class="start-nav-btn hidden">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2 L4 20 L12 14 L20 20 Z" fill="currentColor"/>
+          </svg>
+          Start Navigation
+        </button>
+        <button id="stopNavBtn-mobile" class="stop-nav-btn hidden">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <rect x="6" y="6" width="12" height="12" fill="currentColor"/>
+          </svg>
+          Stop Navigation
+        </button>
+      </div>
+
       <div class="alts alts-mobile">
         <div class="alts-title">Alternative Routes</div>
         <div id="alts-mobile" class="alts-list"></div>
@@ -154,55 +146,37 @@
     </div>
   </div>
 
-
   <!-- Mobile Team Info Button -->
   <button class="mobile-info-btn mobile-only" id="mobileInfoBtn">
-    <span class="info-icon">🧑‍💻</span>
+    <span class="info-icon">🧑💻</span>
+    Team MG
   </button>
-
 
   <!-- Mobile Team Modal -->
   <div class="mobile-modal mobile-only hidden" id="teamModal">
     <div class="modal-content">
       <div class="modal-header">
         <h3>Team MG</h3>
-        <button class="modal-close" id="modalClose">×</button>
+        <button class="modal-close" id="modalClose">✕</button>
       </div>
       <div class="modal-body">
         <div class="team-member lead">
-          <span class="member-icon">👨‍💼</span>
+          <span class="member-icon">👨💼</span>
           <div class="member-info">
             <div class="member-name">Arnab Mazumder</div>
             <div class="member-role">Team Lead</div>
           </div>
         </div>
-        <div class="team-member">
-          <span class="member-icon">👨‍💻</span>
-          <span class="member-name">Karthik G</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👨‍💻</span>
-          <span class="member-name">Pranav S</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👩‍💻</span>
-          <span class="member-name">Bhoomi Umakant Rane</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👨‍💻</span>
-          <span class="member-name">Abhayanand G</span>
-        </div>
-        <div class="team-member">
-          <span class="member-icon">👩‍💻</span>
-          <span class="member-name">Kathyayini</span>
-        </div>
+        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Karthik G</span></div>
+        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Pranav S</span></div>
+        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Bhoomi Umakant Rane</span></div>
+        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Abhayanand G</span></div>
+        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Kathyayini</span></div>
       </div>
     </div>
   </div>
 
-
   <div id="map"></div>
-
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
