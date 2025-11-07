@@ -405,6 +405,29 @@ function renderSelectedRoute(selectedIndex) {
   // Store current route
   currentRoute = results[selectedIndex].path;
 
+  // **FIX: Update desktop summary**
+  const meters = results[selectedIndex].distance;
+  const mins = minutesFromMeters(meters);
+  const km = (meters/1000).toFixed(2);
+  
+  const desktopSummary = document.getElementById('summary-desktop');
+  if (desktopSummary) {
+    desktopSummary.textContent = `${mins} min • ${km} km`;
+  }
+
+  // **FIX: Update mobile summary**
+  const mobileSummary = document.getElementById('summary-mobile');
+  const collapsedSummary = document.getElementById('summary-collapsed');
+  if (mobileSummary) {
+    mobileSummary.textContent = `${mins} min • ${km} km`;
+  }
+  if (collapsedSummary) {
+    collapsedSummary.textContent = `${mins} min • ${km} km`;
+  }
+
+  // **FIX: Highlight selected alternative in desktop list**
+  highlightSelectedAlt('desktop', selectedIndex);
+
   if (startMarker) startMarker.bringToFront();
   if (endMarker) endMarker.bringToFront();
 }
