@@ -13,9 +13,9 @@
     {"id":"himalaya","name":"Himalaya Hostel","lat":12.640893,"lng":77.440513},
     {"id":"parking","name":"Parking Area","lat":12.642184,"lng":77.439711},
     {"id":"watertreatment","name":"Water Treatment Plant","lat":12.642356,"lng":77.438209},
-    {"id":"cricket","name":"Jain University Cricket Ground","lat":12.640322,"lng":77.444397},
-    {"id":"swimming","name":"Jain University Swimming Track","lat":12.64057083620428,"lng":77.44419735179274},
-    {"id":"colosseum","name":"Jain University Colosseum","lat":12.640426893433352,"lng":77.44361702664033},
+    {"id":"cricket","name":"Jain University Cricket Ground","lat":12.640509898780993,"lng":77.4447533387408},
+    {"id":"swimming","name":"Jain University Swimming Track","lat":12.640607299488483,"lng": 77.44417937297324},
+    {"id":"colosseum","name":"Jain University Colosseum","lat":12.640490418635629,"lng":77.44362038022881},
     {"id":"sridatta","name":"Sri Datta Sai Spiritual Centre","lat":12.638441930123735,"lng":77.4427656675026},
     {"id":"temple","name":"Jain Temple","lat":12.63825788727642,"lng":77.44359622149811},
     {"id":"jirs","name":"Jain International Residential School","lat":12.639111,"lng":77.444907}
