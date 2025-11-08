@@ -2,57 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Jain Campus Navigator</title>
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <!-- Desktop Sidebar -->
   <div class="sidebar desktop-only">
     <div class="sidebar-header">
-      <h1 class="brand">Jain Campus Navigator</h1>
-      <p class="tagline">Find your way around campus</p>
+      <div class="logo-container">
+        <img src="assets/jain-logo.png" alt="Jain University" class="logo-img">
+      </div>
+      <div class="brand-info">
+        <h1 class="brand">Jain Campus Navigator</h1>
+        <p class="tagline">Navigate around campus</p>
+      </div>
+      <button id="toggleLandmarksBtn" class="toggle-landmarks-btn" title="Toggle landmarks">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+        </svg>
+      </button>
     </div>
 
     <div class="directions-panel">
-      <div class="location-inputs">
-        <div class="input-row">
-          <span class="icon origin-icon">◎</span>
-          <select id="from-desktop" class="location-select"></select>
+      <div class="search-card">
+        <div class="location-inputs-wrapper">
+          <div class="location-line">
+            <div class="route-connector">
+              <div class="connector-dot start-dot"></div>
+              <div class="connector-line"></div>
+              <div class="connector-dot end-dot"></div>
+            </div>
+            
+            <div class="input-fields">
+              <div class="input-row" data-location="from">
+                <button class="drag-handle-left" title="Drag to reorder">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="9" cy="7" r="1.5"/>
+                    <circle cx="15" cy="7" r="1.5"/>
+                    <circle cx="9" cy="12" r="1.5"/>
+                    <circle cx="15" cy="12" r="1.5"/>
+                    <circle cx="9" cy="17" r="1.5"/>
+                    <circle cx="15" cy="17" r="1.5"/>
+                  </svg>
+                </button>
+                <select id="from-desktop" class="location-select"></select>
+              </div>
+              
+              <div class="input-row" data-location="to">
+                <button class="drag-handle-left" title="Drag to reorder">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <circle cx="9" cy="7" r="1.5"/>
+                    <circle cx="15" cy="7" r="1.5"/>
+                    <circle cx="9" cy="12" r="1.5"/>
+                    <circle cx="15" cy="12" r="1.5"/>
+                    <circle cx="9" cy="17" r="1.5"/>
+                    <circle cx="15" cy="17" r="1.5"/>
+                  </svg>
+                </button>
+                <select id="to-desktop" class="location-select"></select>
+              </div>
+            </div>
+            
+            <button id="swapBtn-desktop" class="swap-btn-new" title="Swap locations">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M7 16V4M7 4L3 8M7 4L11 8"/>
+                <path d="M17 8V20M17 20L21 16M17 20L13 16"/>
+              </svg>
+            </button>
+          </div>
         </div>
-        <button id="swapBtn-desktop" class="swap-btn" title="Swap">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-            <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2"/>
-            <path d="M17 14L12 9L7 14" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </button>
-        <div class="input-row">
-          <span class="icon dest-icon">⌖</span>
-          <select id="to-desktop" class="location-select"></select>
-        </div>
-      </div>
 
-      <div>
         <button id="routeBtn-desktop" class="directions-btn">
-          <span>Get Directions</span>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 18l6-6-6-6"/>
           </svg>
+          <span>Get Directions</span>
         </button>
       </div>
 
       <div id="route-info-desktop" class="route-info hidden">
         <div class="route-summary">
-          <div class="walk-icon">🚶</div>
+          <div class="route-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7" fill="#1a73e8"/>
+            </svg>
+          </div>
           <div class="route-details">
             <div id="summary-desktop" class="time-distance">—</div>
-            <div class="mode">Walking • Shortest path</div>
+            <div class="mode-text">Walking • Shortest path</div>
           </div>
+        </div>
+
+        <div class="nav-buttons-desktop desktop-nav-hidden">
+          <button id="startNavBtn-desktop" class="start-nav-btn hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
+            </svg>
+            Start Navigation
+          </button>
+          <button id="stopNavBtn-desktop" class="stop-nav-btn hidden">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="6" y="6" width="12" height="12"/>
+            </svg>
+            Stop Navigation
+          </button>
         </div>
 
         <div class="alts">
@@ -62,49 +120,128 @@
       </div>
     </div>
 
-    <div class="team-credits">
-      <button class="credits-toggle" id="creditsToggle">
-        <span>Made by Team MG</span>
-        <span class="toggle-icon">▾</span>
-      </button>
-      <div class="team-list" id="teamList">
-        <div class="team-member lead">
-          <span class="member-icon">👨💼</span>
-          <div class="member-info">
-            <div class="member-name">Arnab Mazumder</div>
-            <div class="member-role">Team Lead</div>
+    <div class="sidebar-footer">
+      <div class="team-credits">
+        <button class="credits-toggle" id="creditsToggle">
+          <span class="credits-label">Team Members</span>
+          <svg class="toggle-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </button>
+        <div class="team-list" id="teamList">
+          <div class="team-member">
+            <div class="member-avatar">AM</div>
+            <div class="member-info">
+              <div class="member-name">Arnab Mazumder</div>
+            </div>
+          </div>
+          <div class="team-member">
+            <div class="member-avatar">PM</div>
+            <div class="member-info">
+              <div class="member-name">Prabhav M Naik</div>
+            </div>
+          </div>
+          <div class="team-member">
+            <div class="member-avatar">KG</div>
+            <div class="member-info">
+              <div class="member-name">Karthik G</div>
+            </div>
+          </div>
+          <div class="team-member">
+            <div class="member-avatar">PS</div>
+            <div class="member-info">
+              <div class="member-name">Pranav S</div>
+            </div>
           </div>
         </div>
-        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Karthik G</span></div>
-        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Pranav S</span></div>
-        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Bhoomi Umakant Rane</span></div>
-        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Abhayanand G</span></div>
-        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Kathyayini</span></div>
+      </div>
+      
+      <div class="powered-by">
+        <span>Powered by</span>
+        <a href="https://leafletjs.com" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="#78C55D">
+            <path d="M17.5 2.5c-2 0-3.8 1-4.8 2.5C11.7 3.5 9.9 2.5 7.9 2.5 4.4 2.5 1.5 5.4 1.5 8.9c0 4.5 3.8 8.2 9.5 13.4l1.5 1.4 1.5-1.4c5.7-5.2 9.5-8.9 9.5-13.4 0-3.5-2.9-6.4-6.4-6.4z"/>
+          </svg>
+          Leaflet
+        </a>
       </div>
     </div>
   </div>
 
   <!-- Mobile Search Bar -->
   <div class="mobile-search-bar mobile-only">
-    <div class="mobile-inputs">
-      <div class="mobile-input">
-        <span class="mobile-icon">◎</span>
-        <select id="from-mobile" class="mobile-select"></select>
-      </div>
-      <button id="swapBtn-mobile" class="mobile-swap" title="Swap">⇅</button>
-      <div class="mobile-input">
-        <span class="mobile-icon">⌖</span>
-        <select id="to-mobile" class="mobile-select"></select>
-      </div>
+    <div class="mobile-logo">
+      <img src="assets/jain-logo.png" alt="Jain" class="mobile-logo-img">
     </div>
-    <button id="routeBtn-mobile" class="mobile-route-btn">Go</button>
+    
+    <div class="mobile-inputs-wrapper">
+      <div class="mobile-route-line">
+        <div class="mobile-connector">
+          <div class="mobile-connector-dot start"></div>
+          <div class="mobile-connector-line"></div>
+          <div class="mobile-connector-dot end"></div>
+        </div>
+        
+        <div class="mobile-inputs">
+          <div class="mobile-input" data-location="from">
+            <button class="mobile-drag-handle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="9" cy="7" r="1.5"/>
+                <circle cx="15" cy="7" r="1.5"/>
+                <circle cx="9" cy="12" r="1.5"/>
+                <circle cx="15" cy="12" r="1.5"/>
+                <circle cx="9" cy="17" r="1.5"/>
+                <circle cx="15" cy="17" r="1.5"/>
+              </svg>
+            </button>
+            <select id="from-mobile" class="mobile-select"></select>
+          </div>
+          
+          <div class="mobile-input" data-location="to">
+            <button class="mobile-drag-handle">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <circle cx="9" cy="7" r="1.5"/>
+                <circle cx="15" cy="7" r="1.5"/>
+                <circle cx="9" cy="12" r="1.5"/>
+                <circle cx="15" cy="12" r="1.5"/>
+                <circle cx="9" cy="17" r="1.5"/>
+                <circle cx="15" cy="17" r="1.5"/>
+              </svg>
+            </button>
+            <select id="to-mobile" class="mobile-select"></select>
+          </div>
+        </div>
+      </div>
+      
+      <button id="swapBtn-mobile" class="mobile-swap-new" title="Swap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M7 16V4M7 4L3 8M7 4L11 8"/>
+          <path d="M17 8V20M17 20L21 16M17 20L13 16"/>
+        </svg>
+      </button>
+    </div>
+    
+    <button id="routeBtn-mobile" class="mobile-route-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
   </div>
+
+  <!-- Mobile Toggle Landmarks Button -->
+  <button id="toggleLandmarksMobile" class="toggle-landmarks-mobile mobile-only" title="Toggle landmarks">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+    </svg>
+  </button>
 
   <!-- Mobile Floating Route Card -->
   <div id="mobile-route-card" class="mobile-route-card mobile-only hidden">
     <div id="collapsed-view" class="collapsed-view">
       <div class="collapsed-content">
-        <div class="route-icon">🚶</div>
+        <svg class="route-icon-svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
+          <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7" fill="#1a73e8"/>
+        </svg>
         <div>
           <div id="summary-collapsed" class="collapsed-time">—</div>
           <div class="collapsed-mode">Walking</div>
@@ -115,25 +252,31 @@
     <div id="expanded-view" class="expanded-view hidden">
       <div class="route-card-content">
         <div class="route-card-header">
-          <div class="route-icon">🚶</div>
+          <svg class="route-icon-svg" width="28" height="28" viewBox="0 0 24 24" fill="none">
+            <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1L6 8.3V13h2V9.6l1.8-.7" fill="#1a73e8"/>
+          </svg>
           <div>
             <div id="summary-mobile" class="mobile-time">—</div>
             <div class="mobile-mode">Walking</div>
           </div>
         </div>
-        <button class="close-card" id="closeCard">✕</button>
+        <button class="close-card" id="closeCard">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
 
       <div class="nav-buttons">
         <button id="startNavBtn-mobile" class="start-nav-btn hidden">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2 L4 20 L12 14 L20 20 Z" fill="currentColor"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z"/>
           </svg>
           Start Navigation
         </button>
         <button id="stopNavBtn-mobile" class="stop-nav-btn hidden">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <rect x="6" y="6" width="12" height="12" fill="currentColor"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="6" y="6" width="12" height="12"/>
           </svg>
           Stop Navigation
         </button>
@@ -148,30 +291,59 @@
 
   <!-- Mobile Team Info Button -->
   <button class="mobile-info-btn mobile-only" id="mobileInfoBtn">
-    <span class="info-icon">🧑💻</span>
-    Team MG
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+    </svg>
   </button>
 
   <!-- Mobile Team Modal -->
   <div class="mobile-modal mobile-only hidden" id="teamModal">
+    <div class="modal-overlay"></div>
     <div class="modal-content">
       <div class="modal-header">
-        <h3>Team MG</h3>
-        <button class="modal-close" id="modalClose">✕</button>
+        <h3>Team Members</h3>
+        <button class="modal-close" id="modalClose">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
       </div>
       <div class="modal-body">
-        <div class="team-member lead">
-          <span class="member-icon">👨💼</span>
+        <div class="team-member">
+          <div class="member-avatar">AM</div>
           <div class="member-info">
             <div class="member-name">Arnab Mazumder</div>
-            <div class="member-role">Team Lead</div>
           </div>
         </div>
-        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Karthik G</span></div>
-        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Pranav S</span></div>
-        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Bhoomi Umakant Rane</span></div>
-        <div class="team-member"><span class="member-icon">👨💻</span><span class="member-name">Abhayanand G</span></div>
-        <div class="team-member"><span class="member-icon">👩💻</span><span class="member-name">Kathyayini</span></div>
+        <div class="team-member">
+          <div class="member-avatar">PM</div>
+          <div class="member-info">
+            <div class="member-name">Prabhav M Naik</div>
+          </div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">KG</div>
+          <div class="member-info">
+            <div class="member-name">Karthik G</div>
+          </div>
+        </div>
+        <div class="team-member">
+          <div class="member-avatar">PS</div>
+          <div class="member-info">
+            <div class="member-name">Pranav S</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="powered-by">
+          <span>Powered by</span>
+          <a href="https://leafletjs.com" target="_blank" rel="noopener">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#78C55D">
+              <path d="M17.5 2.5c-2 0-3.8 1-4.8 2.5C11.7 3.5 9.9 2.5 7.9 2.5 4.4 2.5 1.5 5.4 1.5 8.9c0 4.5 3.8 8.2 9.5 13.4l1.5 1.4 1.5-1.4c5.7-5.2 9.5-8.9 9.5-13.4 0-3.5-2.9-6.4-6.4-6.4z"/>
+            </svg>
+            Leaflet
+          </a>
+        </div>
       </div>
     </div>
   </div>

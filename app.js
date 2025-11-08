@@ -29,8 +29,97 @@ let lastFix = null;
 // Performance optimizations
 let updateThrottle = null;
 let lastUpdateTime = 0;
-const UPDATE_INTERVAL = 100; // ms - smoother updates
+const UPDATE_INTERVAL = 100;
 let routeLayerGroup = null;
+
+// Landmark markers layer
+let landmarkMarkersLayer = null;
+let landmarksVisible = true; // Track visibility state
+
+// Custom icon definitions for different landmark types
+const iconCategories = {
+  academic: ['aero', 'nonit', 'fet'],
+  auditorium: ['colosseum'],
+  sports: ['golf', 'football', 'cricket', 'swimming'],
+  residential: ['purvanchal', 'karakoram', 'himalaya'],
+  dining: ['canteen', 'cothas'],
+  transport: ['busstop', 'parking'],
+  facilities: ['forging', 'watertreatment'],
+  religious: ['temple', 'sridatta'],
+  school: ['jirs']
+};
+
+function getIconForLandmark(landmarkId) {
+  let category = 'default';
+  for (const [cat, ids] of Object.entries(iconCategories)) {
+    if (ids.includes(landmarkId)) {
+      category = cat;
+      break;
+    }
+  }
+
+  const iconConfig = {
+    academic: { color: '#1a73e8', icon: '🏛️', bgColor: '#e8f0fe' },
+    auditorium: { color: '#9334e6', icon: '🎭', bgColor: '#f3e8fd' },
+    sports: { color: '#34a853', icon: '⚽', bgColor: '#e6f4ea' },
+    residential: { color: '#fbbc04', icon: '🏠', bgColor: '#fef7e0' },
+    dining: { color: '#ea4335', icon: '🍴', bgColor: '#fce8e6' },
+    transport: { color: '#9334e6', icon: '🚌', bgColor: '#f3e8fd' },
+    facilities: { color: '#5f6368', icon: '⚙️', bgColor: '#f1f3f4' },
+    religious: { color: '#ff6d00', icon: '🕉️', bgColor: '#fff3e0' },
+    school: { color: '#1a73e8', icon: '🎓', bgColor: '#e8f0fe' },
+    default: { color: '#5f6368', icon: '📍', bgColor: '#f1f3f4' }
+  };
+
+  const config = iconConfig[category] || iconConfig.default;
+
+  return L.divIcon({
+    className: 'custom-landmark-marker',
+    html: `
+      <div style="
+        width: 32px;
+        height: 32px;
+        background: ${config.bgColor};
+        border: 2px solid ${config.color};
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: all 0.2s;
+      " class="landmark-icon-inner">
+        ${config.icon}
+      </div>
+    `,
+    iconSize: [32, 32],
+    iconAnchor: [16, 16],
+    popupAnchor: [0, -16]
+  });
+}
+
+// Toggle landmarks visibility
+function toggleLandmarks() {
+  landmarksVisible = !landmarksVisible;
+  
+  const toggleBtnDesktop = document.getElementById('toggleLandmarksBtn');
+  const toggleBtnMobile = document.getElementById('toggleLandmarksMobile');
+  
+  if (landmarksVisible) {
+    if (landmarkMarkersLayer) {
+      map.addLayer(landmarkMarkersLayer);
+    }
+    toggleBtnDesktop?.classList.add('active');
+    toggleBtnMobile?.classList.add('active');
+  } else {
+    if (landmarkMarkersLayer) {
+      map.removeLayer(landmarkMarkersLayer);
+    }
+    toggleBtnDesktop?.classList.remove('active');
+    toggleBtnMobile?.classList.remove('active');
+  }
+}
 
 async function initMap() {
   const campusCenter = L.latLng(12.63992, 77.44123);
@@ -46,13 +135,14 @@ async function initMap() {
     maxBoundsViscosity: 1.0,
     minZoom: 15,
     maxZoom: 19,
-    preferCanvas: true, // Performance boost
-    renderer: L.canvas({ tolerance: 5 })
+    preferCanvas: true,
+    renderer: L.canvas({ tolerance: 5 }),
+    attributionControl: false
   }).setView([12.6409, 77.4412], 16);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 20,
-    attribution: 'OpenStreetMap contributors',
+    attribution: '',
     updateWhenIdle: true,
     updateWhenZooming: false,
     keepBuffer: 2
@@ -74,6 +164,15 @@ async function initMap() {
   // Load data
   places = await (await fetch('data/landmarks.json')).json();
   graph = await (await fetch('data/paths.json')).json();
+
+  // Add landmark markers to map
+  landmarkMarkersLayer = L.layerGroup().addTo(map);
+  places.forEach(place => {
+    const icon = getIconForLandmark(place.id);
+    const marker = L.marker([place.lat, place.lng], { icon: icon })
+      .bindPopup(`<strong>${place.name}</strong>`)
+      .addTo(landmarkMarkersLayer);
+  });
 
   // Add entrance nodes
   places.forEach(p => {
@@ -125,11 +224,7 @@ async function initMap() {
     });
     selFromDesktop.value = 'busstop';
     selToDesktop.value = 'canteen';
-    document.getElementById('swapBtn-desktop').onclick = () => {
-      const f = selFromDesktop.value;
-      selFromDesktop.value = selToDesktop.value;
-      selToDesktop.value = f;
-    };
+    document.getElementById('swapBtn-desktop').onclick = swapDesktopLocations;
     document.getElementById('routeBtn-desktop').onclick = route;
   }
 
@@ -143,26 +238,42 @@ async function initMap() {
     });
     selFromMobile.value = 'busstop';
     selToMobile.value = 'canteen';
-    document.getElementById('swapBtn-mobile').onclick = () => {
-      const f = selFromMobile.value;
-      selFromMobile.value = selToMobile.value;
-      selToMobile.value = f;
-    };
+    document.getElementById('swapBtn-mobile').onclick = swapMobileLocations;
     document.getElementById('routeBtn-mobile').onclick = routeMobile;
   }
+
+  // Toggle landmarks buttons
+  document.getElementById('toggleLandmarksBtn')?.addEventListener('click', toggleLandmarks);
+  document.getElementById('toggleLandmarksMobile')?.addEventListener('click', toggleLandmarks);
+  
+  // Set initial active state
+  document.getElementById('toggleLandmarksBtn')?.classList.add('active');
+  document.getElementById('toggleLandmarksMobile')?.classList.add('active');
 
   // UI toggles
   document.getElementById('creditsToggle')?.addEventListener('click', function () {
     const teamList = document.getElementById('teamList');
     const icon = this.querySelector('.toggle-icon');
     teamList.classList.toggle('open');
-    icon.textContent = teamList.classList.contains('open') ? '▴' : '▾';
+    if (teamList.classList.contains('open')) {
+      icon.style.transform = 'rotate(180deg)';
+    } else {
+      icon.style.transform = 'rotate(0deg)';
+    }
   });
+
   document.getElementById('mobileInfoBtn')?.addEventListener('click', () => {
     document.getElementById('teamModal').classList.remove('hidden');
   });
+
   document.getElementById('modalClose')?.addEventListener('click', () => {
     document.getElementById('teamModal').classList.add('hidden');
+  });
+
+  document.getElementById('teamModal')?.addEventListener('click', (e) => {
+    if (e.target.classList.contains('mobile-modal')) {
+      document.getElementById('teamModal').classList.add('hidden');
+    }
   });
 
   // Route card toggle
@@ -170,14 +281,172 @@ async function initMap() {
     document.getElementById('collapsed-view').classList.add('hidden');
     document.getElementById('expanded-view').classList.remove('hidden');
   });
+
   document.getElementById('closeCard')?.addEventListener('click', () => {
     document.getElementById('expanded-view').classList.add('hidden');
     document.getElementById('collapsed-view').classList.remove('hidden');
   });
 
-  // Navigation buttons
+  // Navigation buttons - Desktop
+  document.getElementById('startNavBtn-desktop')?.addEventListener('click', startNavigation);
+  document.getElementById('stopNavBtn-desktop')?.addEventListener('click', stopNavigation);
+
+  // Navigation buttons - Mobile
   document.getElementById('startNavBtn-mobile')?.addEventListener('click', startNavigation);
   document.getElementById('stopNavBtn-mobile')?.addEventListener('click', stopNavigation);
+
+  // Setup drag and drop after DOM is ready and selects are populated
+  setTimeout(setupDragAndDrop, 100);
+}
+
+// Swap functions
+function swapDesktopLocations() {
+  const fromSelect = document.getElementById('from-desktop');
+  const toSelect = document.getElementById('to-desktop');
+  const tempValue = fromSelect.value;
+  fromSelect.value = toSelect.value;
+  toSelect.value = tempValue;
+}
+
+function swapMobileLocations() {
+  const fromSelect = document.getElementById('from-mobile');
+  const toSelect = document.getElementById('to-mobile');
+  const tempValue = fromSelect.value;
+  fromSelect.value = toSelect.value;
+  toSelect.value = tempValue;
+}
+
+// ============ DRAG AND DROP FUNCTIONALITY ============
+
+function setupDragAndDrop() {
+  // Desktop drag and drop
+  const desktopRows = document.querySelectorAll('.sidebar .input-row');
+  desktopRows.forEach(row => {
+    const dragHandle = row.querySelector('.drag-handle-left');
+    if (dragHandle) {
+      dragHandle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        startDragDesktop(row);
+      });
+    }
+  });
+
+  // Mobile drag and drop - FIXED VERSION
+  const mobileInputs = document.querySelectorAll('.mobile-search-bar .mobile-input');
+  mobileInputs.forEach(input => {
+    const dragHandle = input.querySelector('.mobile-drag-handle');
+    if (dragHandle) {
+      // Remove any existing listeners
+      dragHandle.removeEventListener('touchstart', handleTouchStart);
+      // Add new listener
+      dragHandle.addEventListener('touchstart', handleTouchStart, { passive: false });
+    }
+  });
+}
+
+let draggedElement = null;
+let dragType = null;
+let dragStartY = 0;
+let swapOccurred = false;
+
+function startDragDesktop(row) {
+  draggedElement = row;
+  dragType = 'desktop';
+  
+  const ghostRow = row.cloneNode(true);
+  ghostRow.style.position = 'fixed';
+  ghostRow.style.pointerEvents = 'none';
+  ghostRow.style.opacity = '0.8';
+  ghostRow.style.zIndex = '10000';
+  ghostRow.style.width = row.offsetWidth + 'px';
+  ghostRow.id = 'drag-ghost';
+  document.body.appendChild(ghostRow);
+  
+  row.style.opacity = '0.3';
+
+  const moveHandler = (e) => {
+    const ghost = document.getElementById('drag-ghost');
+    if (ghost) {
+      ghost.style.left = e.clientX - ghost.offsetWidth / 2 + 'px';
+      ghost.style.top = e.clientY - 20 + 'px';
+    }
+
+    const rows = document.querySelectorAll('.sidebar .input-row');
+    rows.forEach(r => {
+      const rect = r.getBoundingClientRect();
+      if (e.clientY > rect.top && e.clientY < rect.bottom && r !== row) {
+        swapDesktopLocations();
+      }
+    });
+  };
+
+  const upHandler = () => {
+    const ghost = document.getElementById('drag-ghost');
+    if (ghost) ghost.remove();
+    if (row) row.style.opacity = '1';
+    document.removeEventListener('mousemove', moveHandler);
+    document.removeEventListener('mouseup', upHandler);
+    draggedElement = null;
+    dragType = null;
+  };
+
+  document.addEventListener('mousemove', moveHandler);
+  document.addEventListener('mouseup', upHandler);
+}
+
+function handleTouchStart(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  const dragHandle = e.currentTarget;
+  const input = dragHandle.closest('.mobile-input');
+  
+  if (!input) return;
+  
+  draggedElement = input;
+  dragType = 'mobile';
+  swapOccurred = false;
+  dragStartY = e.touches[0].clientY;
+  
+  input.style.opacity = '0.5';
+  input.style.transform = 'scale(0.95)';
+
+  const handleTouchMove = (e) => {
+    if (!draggedElement) return;
+    
+    const touch = e.touches[0];
+    const currentY = touch.clientY;
+    const deltaY = Math.abs(currentY - dragStartY);
+    
+    // Only trigger swap if moved significantly
+    if (deltaY > 30 && !swapOccurred) {
+      swapOccurred = true;
+      swapMobileLocations();
+      
+      // Visual feedback
+      const inputs = document.querySelectorAll('.mobile-search-bar .mobile-input');
+      inputs.forEach(inp => {
+        inp.style.transition = 'transform 0.3s ease';
+      });
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (input) {
+      input.style.opacity = '1';
+      input.style.transform = 'scale(1)';
+      input.style.transition = 'all 0.2s ease';
+    }
+    
+    document.removeEventListener('touchmove', handleTouchMove);
+    document.removeEventListener('touchend', handleTouchEnd);
+    draggedElement = null;
+    dragType = null;
+    swapOccurred = false;
+  };
+
+  document.addEventListener('touchmove', handleTouchMove, { passive: false });
+  document.addEventListener('touchend', handleTouchEnd);
 }
 
 // Haversine
@@ -328,9 +597,7 @@ function renderSelectedRoute(selectedIndex) {
   if (!results || !results.length) return;
   selectedRouteIndex = selectedIndex;
 
-  // Only clear route polylines when NOT in navigation mode
   if (!navigationMode) {
-    // Clear previous route layers efficiently
     if (routeLayerGroup) {
       map.removeLayer(routeLayerGroup);
       routeLayerGroup = null;
@@ -339,50 +606,49 @@ function renderSelectedRoute(selectedIndex) {
     for (const l of altLayers) map.removeLayer(l);
     altLayers = [];
 
-    // Use LayerGroup for better performance
     const layers = [];
 
-    // Render alternatives
+    // Render alternatives with subtle styling - LIGHT BLUE
     results.forEach((res, idx) => {
       const latlngs = res.path.map(i => [nodeList[i].lat, nodeList[i].lng]);
       if (idx !== selectedIndex) {
         const altBorder = L.polyline(latlngs, { 
           color: '#ffffff', 
-          weight: 8, 
-          opacity: 0.6, 
+          weight: 7, 
+          opacity: 0.8, 
           lineCap: 'round', 
           lineJoin: 'round',
           smoothFactor: 1.0
         });
         const alt = L.polyline(latlngs, { 
-          color: '#5b9aff', 
-          weight: 5, 
-          opacity: 0.5, 
+          color: '#8ab4f8', 
+          weight: 4, 
+          opacity: 0.7, 
           lineCap: 'round', 
           lineJoin: 'round',
           smoothFactor: 1.0
         });
         alt.on('click', () => renderSelectedRoute(idx));
-        alt.on('mouseover', function(){ this.setStyle({weight:6, opacity:0.7}); });
-        alt.on('mouseout', function(){ this.setStyle({weight:5, opacity:0.5}); });
+        alt.on('mouseover', function(){ this.setStyle({weight:5, opacity:0.9}); });
+        alt.on('mouseout', function(){ this.setStyle({weight:4, opacity:0.7}); });
         layers.push(altBorder, alt);
         altLayers.push(altBorder, alt);
       }
     });
 
-    // Render selected route bold
+    // Render selected route - DARK BLUE (Google Maps style)
     const selectedLatlngs = results[selectedIndex].path.map(i => [nodeList[i].lat, nodeList[i].lng]);
     const selectedBorder = L.polyline(selectedLatlngs, { 
       color: '#ffffff', 
-      weight: 10, 
-      opacity: 0.8, 
+      weight: 9, 
+      opacity: 0.9, 
       lineCap: 'round', 
       lineJoin: 'round',
       smoothFactor: 1.0
     });
     routeLayer = L.polyline(selectedLatlngs, { 
-      color: '#0d47a1', 
-      weight: 6, 
+      color: '#1967d2', 
+      weight: 5, 
       opacity: 1, 
       lineCap: 'round', 
       lineJoin: 'round',
@@ -392,7 +658,6 @@ function renderSelectedRoute(selectedIndex) {
     layers.push(selectedBorder, routeLayer);
     altLayers.push(selectedBorder);
 
-    // Add all layers at once for better performance
     routeLayerGroup = L.layerGroup(layers).addTo(map);
 
     if (routeLayer) {
@@ -402,10 +667,8 @@ function renderSelectedRoute(selectedIndex) {
     }
   }
 
-  // Store current route
   currentRoute = results[selectedIndex].path;
 
-  // **FIX: Update desktop summary**
   const meters = results[selectedIndex].distance;
   const mins = minutesFromMeters(meters);
   const km = (meters/1000).toFixed(2);
@@ -415,7 +678,6 @@ function renderSelectedRoute(selectedIndex) {
     desktopSummary.textContent = `${mins} min • ${km} km`;
   }
 
-  // **FIX: Update mobile summary**
   const mobileSummary = document.getElementById('summary-mobile');
   const collapsedSummary = document.getElementById('summary-collapsed');
   if (mobileSummary) {
@@ -425,7 +687,6 @@ function renderSelectedRoute(selectedIndex) {
     collapsedSummary.textContent = `${mins} min • ${km} km`;
   }
 
-  // **FIX: Highlight selected alternative in desktop list**
   highlightSelectedAlt('desktop', selectedIndex);
 
   if (startMarker) startMarker.bringToFront();
@@ -441,13 +702,25 @@ function setStartEndMarkers(A, B) {
   if (startMarker) { map.removeLayer(startMarker); startMarker = null; }
   if (endMarker) { map.removeLayer(endMarker); endMarker = null; }
 
+  // Start marker - Google Maps style blue dot
   startMarker = L.circleMarker([A.lat, A.lng], {
-    radius: 8, fillColor: '#4285f4', color: '#fff', weight: 2, opacity: 1, fillOpacity: 1
-  }).addTo(map).bindPopup(A.name);
+    radius: 8, 
+    fillColor: '#1a73e8', 
+    color: '#fff', 
+    weight: 3, 
+    opacity: 1, 
+    fillOpacity: 1
+  }).addTo(map).bindPopup(`<strong>Start:</strong> ${A.name}`);
 
+  // End marker - Google Maps style red pin
   endMarker = L.circleMarker([B.lat, B.lng], {
-    radius: 8, fillColor: '#EA4335', color: '#fff', weight: 2, opacity: 1, fillOpacity: 1
-  }).addTo(map).bindPopup(B.name);
+    radius: 8, 
+    fillColor: '#ea4335', 
+    color: '#fff', 
+    weight: 3, 
+    opacity: 1, 
+    fillOpacity: 1
+  }).addTo(map).bindPopup(`<strong>Destination:</strong> ${B.name}`);
 }
 
 function populateAlternativesUI(results, context) {
@@ -481,7 +754,6 @@ function populateAlternativesUI(results, context) {
     });
     highlightSelectedAlt('desktop', 0);
   } else {
-    // Mobile: skip first route from alternatives list since it's displayed in header
     const list = document.getElementById('alts-mobile');
     list.innerHTML = '';
     items.slice(1).forEach(({idx, mins, km}) => {
@@ -531,6 +803,11 @@ async function route() {
   renderSelectedRoute(0);
   document.getElementById('summary-desktop').textContent = `${mins} min • ${(meters/1000).toFixed(2)} km`;
   document.getElementById('route-info-desktop').classList.remove('hidden');
+  
+  // Show navigation buttons
+  document.getElementById('startNavBtn-desktop').classList.remove('hidden');
+  document.getElementById('stopNavBtn-desktop').classList.add('hidden');
+  
   populateAlternativesUI(results, 'desktop');
 }
 
@@ -558,15 +835,12 @@ async function routeMobile() {
   document.getElementById('summary-mobile').textContent = `${mins} min • ${(meters/1000).toFixed(2)} km`;
   document.getElementById('summary-collapsed').textContent = `${mins} min • ${(meters/1000).toFixed(2)} km`;
   
-  // Show mobile route card and open EXPANDED view by default so alternatives are visible
   document.getElementById('mobile-route-card').classList.remove('hidden');
   document.getElementById('collapsed-view').classList.add('hidden');
   document.getElementById('expanded-view').classList.remove('hidden');
 
-  // Populate alternatives for mobile
   populateAlternativesUI(results, 'mobile');
 
-  // Show start button, hide stop button
   document.getElementById('startNavBtn-mobile').classList.remove('hidden');
   document.getElementById('stopNavBtn-mobile').classList.add('hidden');
 }
@@ -579,17 +853,17 @@ function startNavigation() {
   completedSegments = new Set();
   destinationReached = false;
 
-  // Hide alternatives and non-selected routes during navigation
   if (routeLayerGroup) { map.removeLayer(routeLayerGroup); routeLayerGroup = null; }
   if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
   for (const l of altLayers) { map.removeLayer(l); }
   altLayers = [];
 
-  // Hide start button, show stop button
-  document.getElementById('startNavBtn-mobile').classList.add('hidden');
-  document.getElementById('stopNavBtn-mobile').classList.remove('hidden');
+  // Hide start, show stop buttons
+  document.getElementById('startNavBtn-desktop')?.classList.add('hidden');
+  document.getElementById('stopNavBtn-desktop')?.classList.remove('hidden');
+  document.getElementById('startNavBtn-mobile')?.classList.add('hidden');
+  document.getElementById('stopNavBtn-mobile')?.classList.remove('hidden');
 
-  // Begin location tracking with optimized settings
   if (navigator.geolocation) {
     watchId = navigator.geolocation.watchPosition(updateUserPosition, handleLocationError, {
       enableHighAccuracy: true,
@@ -612,16 +886,16 @@ function stopNavigation() {
   if (routePolylines.remaining) { map.removeLayer(routePolylines.remaining); routePolylines.remaining = null; }
   if (connectorLine) { map.removeLayer(connectorLine); connectorLine = null; }
 
-  // Clear throttle
   if (updateThrottle) {
     clearTimeout(updateThrottle);
     updateThrottle = null;
   }
 
-  // Re-render the originally selected route and alternatives
   if (lastResults && lastResults.length) renderSelectedRoute(selectedRouteIndex);
 
-  // Show start button again
+  // Show start buttons again
+  document.getElementById('startNavBtn-desktop')?.classList.remove('hidden');
+  document.getElementById('stopNavBtn-desktop')?.classList.add('hidden');
   document.getElementById('startNavBtn-mobile')?.classList.remove('hidden');
   document.getElementById('stopNavBtn-mobile')?.classList.add('hidden');
 }
@@ -643,7 +917,6 @@ function updateUserPosition(position) {
 
   const now = Date.now();
   
-  // Throttle updates for smooth performance
   if (now - lastUpdateTime < UPDATE_INTERVAL) {
     return;
   }
@@ -652,7 +925,6 @@ function updateUserPosition(position) {
   const newPos = { lat: position.coords.latitude, lng: position.coords.longitude };
   currentPosition = newPos;
 
-  // Determine heading
   let heading = typeof position.coords.heading === 'number' && !isNaN(position.coords.heading) ? position.coords.heading : null;
   if (heading == null && lastFix) {
     const bearing = computeBearing(lastFix, newPos);
@@ -661,14 +933,12 @@ function updateUserPosition(position) {
   if (heading == null) heading = lastHeading; else lastHeading = heading;
   lastFix = newPos;
 
-  // Use requestAnimationFrame for smooth updates
   requestAnimationFrame(() => {
     updateUserMarker(position, heading);
     ensureConnectorToStart();
     updateNavigationRoute();
   });
 
-  // Destination check
   const destNode = currentRoute[currentRoute.length - 1];
   const destDist = hav(currentPosition, nodeList[destNode]);
   if (destDist < 10 && !destinationReached) {
@@ -706,7 +976,7 @@ function ensureConnectorToStart() {
       smoothFactor: 1.0
     });
     const dotted = L.polyline(points, { 
-      color: '#4285f4', 
+      color: '#1a73e8', 
       weight: 4, 
       opacity: 0.9, 
       dashArray: '6,6', 
@@ -751,19 +1021,36 @@ function rerouteFromCurrentPosition() {
     const km = (meters/1000).toFixed(2);
     const sMobile = document.getElementById('summary-mobile');
     const sColl = document.getElementById('summary-collapsed');
+    const sDesktop = document.getElementById('summary-desktop');
     if (sMobile) sMobile.textContent = `${mins} min • ${km} km • Rerouted`;
     if (sColl) sColl.textContent = `${mins} min • ${km} km • Rerouted`;
+    if (sDesktop) sDesktop.textContent = `${mins} min • ${km} km • Rerouted`;
   }
 }
 
 function updateUserMarker(position, headingDeg) {
-  const size = 30;
+  const size = 36;
+  
+  // Improved navigation arrow with white background
   const arrowIcon = L.divIcon({
     className: 'user-location-marker',
     html: `
-      <div style="transform: rotate(${headingDeg||0}deg); width:${size}px; height:${size}px;">
-        <svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="#4285f4" stroke="#ffffff" stroke-width="1.2">
-          <path d="M12 2 L4 20 L12 14 L20 20 Z"></path>
+      <div style="
+        transform: rotate(${headingDeg||0}deg);
+        width: ${size}px;
+        height: ${size}px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <svg viewBox="0 0 24 24" width="${size}" height="${size}">
+          <defs>
+            <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.4"/>
+            </filter>
+          </defs>
+          <circle cx="12" cy="12" r="10" fill="white" filter="url(#shadow)"/>
+          <path d="M12 4 L16 16 L12 13 L8 16 Z" fill="#1a73e8" stroke="white" stroke-width="0.5"/>
         </svg>
       </div>
     `,
@@ -772,13 +1059,15 @@ function updateUserMarker(position, headingDeg) {
   });
 
   if (!userMarker) {
-    userMarker = L.marker([currentPosition.lat, currentPosition.lng], { icon: arrowIcon, zIndexOffset: 1000 }).addTo(map);
+    userMarker = L.marker([currentPosition.lat, currentPosition.lng], { 
+      icon: arrowIcon, 
+      zIndexOffset: 1000 
+    }).addTo(map);
   } else {
     userMarker.setLatLng([currentPosition.lat, currentPosition.lng]);
     userMarker.setIcon(arrowIcon);
   }
   
-  // Smooth pan instead of setView
   map.panTo([currentPosition.lat, currentPosition.lng], { 
     animate: true,
     duration: 0.25,
@@ -809,7 +1098,6 @@ function updateNavigationRoute() {
 
   for (let i=0;i<closestSegmentIndex;i++){ completedSegments.add(i); }
 
-  // Efficiently update polylines
   if (routePolylines.completed) { 
     map.removeLayer(routePolylines.completed); 
     routePolylines.completed = null; 
@@ -819,7 +1107,6 @@ function updateNavigationRoute() {
     routePolylines.remaining = null; 
   }
 
-  // Remove old alt layers
   for (const l of altLayers) { map.removeLayer(l); }
   altLayers = [];
 
@@ -834,9 +1121,9 @@ function updateNavigationRoute() {
   }
   if (completedCoords.length > 1) {
     routePolylines.completed = L.polyline(completedCoords, {
-      color: '#90caf9', 
-      weight: 6, 
-      opacity: 0.8, 
+      color: '#80868b', 
+      weight: 5, 
+      opacity: 0.6, 
       lineCap: 'round', 
       lineJoin: 'round',
       smoothFactor: 1.0
@@ -852,8 +1139,8 @@ function updateNavigationRoute() {
   if (remainingCoords.length > 1) {
     const remainingBorder = L.polyline(remainingCoords, {
       color: '#ffffff', 
-      weight: 10, 
-      opacity: 0.8, 
+      weight: 8, 
+      opacity: 0.9, 
       lineCap: 'round', 
       lineJoin: 'round',
       smoothFactor: 1.0
@@ -861,8 +1148,8 @@ function updateNavigationRoute() {
     altLayers.push(remainingBorder);
 
     routePolylines.remaining = L.polyline(remainingCoords, {
-      color: '#0d47a1', 
-      weight: 6, 
+      color: '#1a73e8', 
+      weight: 5, 
       opacity: 1, 
       lineCap: 'round', 
       lineJoin: 'round',
