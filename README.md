@@ -30,16 +30,32 @@
 
 ## 📸 Screenshots
 
-### Desktop View
 <div align="center">
-<img src="assets/desktop.png" alt="Desktop Interface" width="800px">
-<p><i>Full-featured desktop interface with sidebar controls and map view</i></p>
-</div>
 
-### Mobile View
-<div align="center">
-<img src="assets/mobile.png" alt="Mobile Interface" width="300px">
-<p><i>Optimized mobile layout for on-the-go navigation</i></p>
+### 🖥️ Desktop Experience
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/desktop.png">
+  <img src="assets/desktop.png" alt="Desktop Interface" width="90%" style="border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); border: 1px solid #e0e0e0;">
+</picture>
+
+<br>
+
+*Full-featured desktop interface with sidebar controls and interactive map view*
+
+---
+
+### 📱 Mobile Experience
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/mobile.png">
+  <img src="assets/mobile.png" alt="Mobile Interface" width="340px" style="border-radius: 20px; box-shadow: 0 12px 48px rgba(0,0,0,0.4); border: 8px solid #333;">
+</picture>
+
+<br>
+
+*Optimized mobile layout for on-the-go navigation with touch-friendly controls*
+
 </div>
 
 ---
@@ -206,31 +222,50 @@ Modify `styles.css` to customize:
 
 ## 👥 Team
 
-<table align="center">
+<div align="center">
+
+### Development Team
+
+<table>
   <tr>
-    <td align="center">
-      <strong>Arnab Mazumder</strong><br>
+    <td align="center" width="200px">
+      <img src="https://ui-avatars.com/api/?name=Arnab+Mazumder&background=1e88e5&color=fff&size=100&bold=true&rounded=true" width="80px" alt="AM"/>
+      <br><br>
+      <strong>Arnab Mazumder</strong>
+      <br>
       <sub>Frontend & Routing Logic</sub>
     </td>
-    <td align="center">
-      <strong>Prabhav Naik</strong><br>
+    <td align="center" width="200px">
+      <img src="https://ui-avatars.com/api/?name=Prabhav+M+Naik&background=1e88e5&color=fff&size=100&bold=true&rounded=true" width="80px" alt="PM"/>
+      <br><br>
+      <strong>Prabhav M Naik</strong>
+      <br>
       <sub>Data Modeling & UI/UX</sub>
     </td>
   </tr>
   <tr>
-    <td align="center">
-      <strong>Muskan Gupta</strong><br>
+    <td align="center" width="200px">
+      <img src="https://ui-avatars.com/api/?name=Karthik+G&background=1e88e5&color=fff&size=100&bold=true&rounded=true" width="80px" alt="KG"/>
+      <br><br>
+      <strong>Karthik G</strong>
+      <br>
       <sub>Algorithm Implementation</sub>
     </td>
-    <td align="center">
-      <strong>Gautam Narayan</strong><br>
+    <td align="center" width="200px">
+      <img src="https://ui-avatars.com/api/?name=Pranav+S&background=1e88e5&color=fff&size=100&bold=true&rounded=true" width="80px" alt="PS"/>
+      <br><br>
+      <strong>Pranav S</strong>
+      <br>
       <sub>Testing & Documentation</sub>
     </td>
   </tr>
 </table>
 
-<div align="center">
-<i>Computer Science & Engineering Students at Jain (Deemed-to-be University)</i>
+<br>
+
+*Computer Science & Engineering Students*  
+*Jain (Deemed-to-be University)*
+
 </div>
 
 ---
@@ -280,7 +315,9 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ### 🌟 Star this repository if you find it helpful!
 
-Made with ❤️ by Team MG at Jain (Deemed-to-be University)
+**Made with ❤️ by Team MG**
+
+*Powered by* 💚 *Leaflet*
 
 **[⬆ Back to Top](#-jain-campus-navigator)**
 
