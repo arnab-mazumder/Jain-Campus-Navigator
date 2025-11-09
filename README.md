@@ -1,233 +1,287 @@
-# Jain Campus Navigator
+<div align="center">
 
-> An interactive web-based navigation system for the Jain (Deemed‑to‑be University) campus with real-time pathfinding.
+# 🗺️ Jain Campus Navigator
 
-[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://jain-campus-navigator.vercel.app)  
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)  
-[![JavaScript](https://img.shields.io/badge/javascript-ES6+-yellow.svg)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)  
-[![Leaflet](https://img.shields.io/badge/leaflet-1.9.4-green.svg)](https://leafletjs.com)
+### Interactive pathfinding system for Jain (Deemed-to-be University)
 
----
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Site-2ea44f?style=for-the-badge)](https://jain-campus-navigator.vercel.app)
+[![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)](LICENSE)
 
-## 🚀 What’s New in Version 2.x
+*Navigate the Jain University campus with intelligent route planning and real-time directions*
 
-### ✅ Recent Features
-- **Realtime User Location & Tracking** – Now supports showing current user location (if permitted) and dynamically recalculating the route if the user deviates.  
-- **Indoor Building Floor Plans** – Added detailed floor-plans for five major buildings (with multiple levels) so users can navigate inside as well as outdoors.  
-- **Accessible Mode** – New toggle for “Accessibility Mode” (high contrast UI, larger map controls, voice directions, wheelchair-accessible routing).  
-- **Bookmark & Favorites** – Users can now save favourite campus locations and access them quickly from a “My Locations” panel.  
-- **Events Overlay** – A new layer shows upcoming campus events and pop-ups on map landmarks; clicking an event shows details.  
-- **Live Congestion Heatmap** – Service-roads network now displays live “footfall / crowd density” visualisation to help route around busy areas (via sensor or manual input).  
-- **Offline Map Cache** – Enables pre-caching of map tiles and graph data so the application works in low-connectivity zones (e.g., indoor labs).  
-- **Enhanced Routing Algorithm** – Upgraded from standard Dijkstra to a variant that supports multi-criteria (e.g., shortest, shaded path, wheelchair-friendly).  
-- **Push Notifications for Updates** – Micro-service integration allows users to subscribe to push alerts (e.g., new route blocked, event started).  
-- **Dark Mode & Theme Switcher** – Added smooth theme toggle (light/dark) with animations and user preference persistence.  
-- **Analytics Dashboard (Admin)** – New backend dashboard (for campus admin) to view routing statistics, popular paths, unreachable nodes, and error logs.
+[Features](#-features) • [Screenshots](#-screenshots) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Team](#-team)
 
-### 🧩 Code & Architecture Updates
-- Modularised `app.js` into ES6 modules: `map.js`, `routing.js`, `ui.js`, `accessibility.js`, `events.js`, `analytics.js`.  
-- Introduced service worker (`sw.js`) for caching resources and offline support.  
-- Updated data schema: `landmarks.v2.json`, `paths.v2.json` (with added metadata fields: `type`, `floor`, `accessible`).  
-- Configured environment variables (`.env`) for toggling analytics and debug modes.  
-- Added unit tests (Jest) for the routing logic and accessibility features.  
-- CI/CD pipeline: GitHub Actions workflow automates linting (ESLint), formatting (Prettier), build, and deployment to Vercel.  
-- Added logging and error-handling: custom `Logger` class records map load failures, geolocation permission issues, and graph consistency errors.  
-- Performance improvements: lazy loading of building floor-plans, code-splitting with dynamic imports, route calculations now < 30 ms on average devices.
-
-### 🎨 UI & UX Enhancements
-- New home screen with start-/destination quick-buttons, recently used locations, and accessibility toggle.  
-- Responsive layout enhancements: improved tablet and foldable device support (dual-pane view).  
-- Animated route transitions: when path updates mid-walk, smooth animation of polyline update rather than abrupt jump.  
-- Voice guidance (optional): after selecting a route, user can enable voice prompts (“turn left at Ground Floor Lobby”, etc.).  
-- Custom map markers: each landmark now has category icon (Lecture Hall, Canteen, Library, Sports Facility) and hover/tool-tips with thumbnail photos.  
-- Help overlay: first-time users get an interactive walkthrough overlay explaining map controls, routing options, and accessibility mode.  
-- New branding: updated gradient theme, refreshed icons, improved typography for clarity.
-
-### 📦 Deployment & Data
-- Updated data ingestion script: `scripts/updateGraph.js` handles new node types (indoor, accessible) and regenerates graph edges automatically.  
-- Versioned data: `/data/v1/`, `/data/v2/` directories, with auto-migration for legacy bookmarks and saved routes.  
-- Dockerised local development: added `docker-compose.yml` to run a local server with mocked analytics, routing API, and map tile cache.
+</div>
 
 ---
 
-## 🛠️ Getting Started (Version 2)
+## ✨ Features
+
+- 🎯 **Smart Pathfinding** – Find the shortest route between any two campus locations using Dijkstra's algorithm
+- 📍 **Interactive Map** – Powered by Leaflet.js with OpenStreetMap tiles for accurate campus visualization
+- 🏛️ **Comprehensive Landmarks** – Navigate to lecture halls, libraries, canteens, administrative buildings, and more
+- 📱 **Responsive Design** – Seamless experience across desktop, tablet, and mobile devices
+- 🧭 **Turn-by-Turn Directions** – Step-by-step navigation instructions with distance and time estimates
+- 🎨 **Modern UI** – Clean, intuitive interface with smooth animations and visual feedback
+- ⚡ **Fast & Lightweight** – Pure JavaScript implementation with no heavy frameworks
+- 🌐 **Zero Dependencies** – Only uses Leaflet.js for mapping, everything else is vanilla JS
+
+---
+
+## 📸 Screenshots
+
+### Desktop View
+<div align="center">
+<img src="assets/desktop.png" alt="Desktop Interface" width="800px">
+<p><i>Full-featured desktop interface with sidebar controls and map view</i></p>
+</div>
+
+### Mobile View
+<div align="center">
+<img src="assets/mobile.png" alt="Mobile Interface" width="300px">
+<p><i>Optimized mobile layout for on-the-go navigation</i></p>
+</div>
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js v16+ (for dev server, build scripts)  
-- NPM v8+  
-- Git (for cloning)  
-- Optional: Docker (for local stack)
 
-### Installation & Local Serve
-1. Clone the repository  
-    ```bash
-    git clone https://github.com/YOUR_USERNAME/jain-campus-navigator.git  
-    cd jain-campus-navigator
-    ```  
-2. Install dependencies  
-    ```bash
-    npm install
-    ```  
-3. Start development server  
-    ```bash
-    npm run dev
-    ```  
-    Visit `http://localhost:3000`.  
-4. Build for production  
-    ```bash
-    npm run build
-    ```  
-5. Serve production build  
-    ```bash
-    npm run serve
-    ```  
-    or use Docker:  
-    ```bash
-    docker compose up
-    ```
+- A modern web browser (Chrome, Firefox, Safari, Edge)
+- Basic web server (optional for local development)
 
-### Configuration
-- Copy `.env.example` → `.env` and customise:  
-  ```bash
-  REACT_APP_ANALYTICS_ENABLED=true  
-  REACT_APP_OFFLINE_CACHE=true  
-  REACT_APP_DEFAULT_THEME=dark  
-Data files in /data/v2/landmarks.v2.json and /data/v2/paths.v2.json
+### Installation
 
-Map tile source, analytics endpoint, push-notification keys configured in config.js
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/jain-campus-navigator.git
+   cd jain-campus-navigator
+   ```
 
-Deployment
-Using Vercel:
+2. **Open locally**
+   
+   Simply open `index.html` in your browser, or use a local server:
+   
+   ```bash
+   # Using Python 3
+   python -m http.server 8000
+   
+   # Using Node.js http-server
+   npx http-server
+   
+   # Using PHP
+   php -S localhost:8000
+   ```
 
-bash
-Copy code
-vercel --prod
-Using GitHub Pages: (if opting) build the project and push dist/ to gh-pages branch and configure in repo settings.
+3. **Access the application**
+   
+   Navigate to `http://localhost:8000` in your browser
 
-📂 Project Structure (Modified for v2)
-pgsql
-Copy code
-campus-navigator/
-├── public/
-│   └── icons/ …  
-├── src/
-│   ├── components/
-│   ├── modules/
-│   │   ├── map.js
-│   │   ├── routing.js
-│   │   ├── accessibility.js
-│   │   ├── events.js
-│   │   └── analytics.js
-│   ├── styles/
-│   │   └── theme-dark.css  
-│   └── index.html  
+### Usage
+
+1. **Select Start Location** – Choose your current location from the dropdown
+2. **Select Destination** – Pick where you want to go
+3. **Get Directions** – Click "Find Route" to see the path highlighted on the map
+4. **Follow Instructions** – View step-by-step directions with estimated walking time
+5. **Explore Campus** – Click on any landmark marker to learn more about it
+
+---
+
+## 📂 Project Structure
+
+```
+jain-campus-navigator/
+├── assets/
+│   ├── campus-bg.jpg      # Campus background image
+│   ├── desktop.png        # Desktop screenshot
+│   ├── jain-logo.png      # University logo
+│   └── mobile.png         # Mobile screenshot
 ├── data/
-│   ├── v1/
-│   └── v2/
-│       ├── landmarks.v2.json  
-│       └── paths.v2.json  
-├── sw.js  
-├── scripts/
-│   └── updateGraph.js  
-├── .env.example  
-├── package.json  
-└── README.md
-📢 How to Use (For End Users)
-Open the web app on desktop or mobile via the live link or local development build.
+│   ├── landmarks.json     # Campus locations and landmarks
+│   └── paths.json         # Walking paths and connections
+├── app.js                 # Main application logic and routing
+├── index.html             # Application entry point
+├── styles.css             # Styling and responsive design
+├── LICENSE                # MIT License
+└── README.md              # Documentation
+```
 
-Optionally enable Accessibility Mode from the settings menu for enhanced UI and voice guidance.
+### Key Files
 
-Select your Start and Destination from the search bar or tap on the map.
+- **`app.js`** – Core application logic including:
+  - Map initialization with Leaflet.js
+  - Dijkstra's pathfinding algorithm
+  - Graph construction from landmark and path data
+  - Route visualization and turn-by-turn directions
+  - UI event handlers and interactions
 
-View the suggested route: distance, estimated walk time (default 1.4 m/s), and alternate criteria (e.g., accessible, shaded path).
+- **`landmarks.json`** – Contains all campus locations with:
+  - Coordinates (latitude/longitude)
+  - Names and categories
+  - Descriptions and additional metadata
 
-If you enable “Track My Location”, the map will follow your current location and update route if you deviate.
+- **`paths.json`** – Defines walkable connections between locations:
+  - Node-to-node connections
+  - Path distances
+  - Walking network topology
 
-Use the Bookmarks panel to save your favourite locations and quickly access them later.
+---
 
-View the Events Overlay to see icons for ongoing/upcoming campus events; tap the icon for details.
+## 🛠️ Technology Stack
 
-For offline use: make sure you have loaded the map once with connectivity; the tile cache and graph data will work in low network zones.
+| Technology | Purpose |
+|------------|---------|
+| **HTML5** | Structure and semantic markup |
+| **CSS3** | Styling, animations, and responsive design |
+| **JavaScript (ES6+)** | Application logic and algorithms |
+| **Leaflet.js** | Interactive map rendering |
+| **OpenStreetMap** | Map tiles and geographic data |
 
-Access “My Locations” (saved bookmarks), switch theme (Light/Dark), or toggle accessibility.
+---
 
-Admins can access analytics dashboard (if authorised) to view popular paths, usage, and errors.
+## 🧮 Algorithm
 
-🔧 Customisation
-Add / Update Locations
-Edit /data/v2/landmarks.v2.json and add entries in this format:
+The application uses **Dijkstra's algorithm** for optimal pathfinding:
 
-json
-Copy code
-{  
-  "id": "new_building",  
-  "name": "New Building Name",  
-  "lat": 12.XXXXXX,  
-  "lng": 77.XXXXXX,  
-  "type": "building",  
-  "floor": null,  
-  "accessible": true  
+```javascript
+// Simplified algorithm overview
+function dijkstra(graph, start, end) {
+  // 1. Initialize distances (start = 0, others = ∞)
+  // 2. Create priority queue with start node
+  // 3. While queue is not empty:
+  //    - Extract node with minimum distance
+  //    - For each neighbor:
+  //      - Calculate tentative distance
+  //      - Update if shorter path found
+  // 4. Reconstruct path from end to start
+  return shortestPath;
 }
-Add / Update Routes
-Modify /data/v2/paths.v2.json to add nodes and edges with extra metadata:
+```
 
-json
-Copy code
-{  
-  "nodes": [ { "id": "N101", "lat": 12.XXXX, "lng": 77.XXXX, "floor": 1, "accessible": true } ],  
-  "edges": [ { "from": "N101", "to": "N102", "distance": 45, "type": "walkway", "accessible": true } ]
+**Time Complexity:** O((V + E) log V) where V = nodes, E = edges  
+**Space Complexity:** O(V)
+
+---
+
+## 🎨 Customization
+
+### Adding New Landmarks
+
+Edit `data/landmarks.json`:
+
+```json
+{
+  "id": "new_building",
+  "name": "New Building Name",
+  "lat": 12.XXXXXX,
+  "lng": 77.XXXXXX,
+  "category": "academic",
+  "description": "Building description"
 }
-Styling & Theming
-– CSS themes located in src/styles/
-– Modify color variables, gradient backgrounds, typography in theme-dark.css / theme-light.css
-– UI icons under public/icons/
-– Toggle accessibility mode UI tweaks in src/modules/accessibility.js
+```
 
-📋 Testing & Quality
-Unit tests (Jest) under __tests__/; run via
+### Adding New Paths
 
-bash
-Copy code
-npm run test
-Linting & formatting:
+Edit `data/paths.json`:
 
-bash
-Copy code
-npm run lint  
-npm run format
-Performance: route computation benchmark < 30 ms for typical graph (~100 nodes, ~150 edges) on mid-spec device.
+```json
+{
+  "from": "building_a",
+  "to": "building_b",
+  "distance": 150
+}
+```
 
-Accessibility audits: screen-reader support, keyboard navigable controls, colour-contrast verified.
+### Styling
 
-👥 Team & Contribution
-Team MG
-Arnab Mazumder – Frontend & routing logic
+Modify `styles.css` to customize:
+- Color scheme and themes
+- Font choices and sizing
+- Layout and spacing
+- Animation timings
+- Mobile breakpoints
 
-Prabhav Naik – Data modelling, graph updates, accessibility features
+---
 
-Contributing
-We welcome pull requests! Please follow the process:
+## 👥 Team
 
-Fork the repository
+<table align="center">
+  <tr>
+    <td align="center">
+      <strong>Arnab Mazumder</strong><br>
+      <sub>Frontend & Routing Logic</sub>
+    </td>
+    <td align="center">
+      <strong>Prabhav Naik</strong><br>
+      <sub>Data Modeling & UI/UX</sub>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <strong>Muskan Gupta</strong><br>
+      <sub>Algorithm Implementation</sub>
+    </td>
+    <td align="center">
+      <strong>Gautam Narayan</strong><br>
+      <sub>Testing & Documentation</sub>
+    </td>
+  </tr>
+</table>
 
-Create feature branch (git checkout -b feature/AmazingFeature)
+<div align="center">
+<i>Computer Science & Engineering Students at Jain (Deemed-to-be University)</i>
+</div>
 
-Commit with descriptive messages (git commit -m 'Add AmazingFeature')
+---
 
-Push to your branch and open a Pull Request
+## 🤝 Contributing
 
-Ensure tests pass, linting is clean, and new features are documented in README.md
+Contributions are welcome! Here's how you can help:
 
-📄 License
-This project is licensed under the MIT License. See the LICENSE file for full details.
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
 
-🙏 Acknowledgments
-The open data contributors of OpenStreetMap for map tiles and road data.
+Please ensure:
+- Code follows existing style conventions
+- Comments explain complex logic
+- Test your changes across different devices
+- Update documentation as needed
 
-The Leaflet.js team for the excellent mapping library.
+---
 
-The campus planning office of Jain University for layout and landmark information.
+## 📝 License
 
-All users and testers who provided feedback to improve accessibility and performance.
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
 
-<p align="center">Made with ❤️ by Team MG at Jain University</p> <p align="center"><a href="https://jainuniversity.ac.in">Jain University</a> • <a href="https://github.com/YOUR_USERNAME/jain-campus-navigator">GitHub</a></p>
+---
+
+## 🙏 Acknowledgments
+
+- **OpenStreetMap Contributors** – For providing free geographic data
+- **Leaflet.js Team** – For the excellent mapping library
+- **Jain University** – For campus layout and landmark information
+- **Our Users** – For valuable feedback and suggestions
+
+---
+
+## 🔗 Links
+
+- **Live Demo:** [jain-campus-navigator.vercel.app](https://jain-campus-navigator.vercel.app)
+- **Report Issues:** [GitHub Issues](https://github.com/yourusername/jain-campus-navigator/issues)
+- **Jain University:** [jainuniversity.ac.in](https://jainuniversity.ac.in)
+
+---
+
+<div align="center">
+
+### 🌟 Star this repository if you find it helpful!
+
+Made with ❤️ by Team MG at Jain (Deemed-to-be University)
+
+**[⬆ Back to Top](#-jain-campus-navigator)**
+
+</div>
